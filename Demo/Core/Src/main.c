@@ -23,6 +23,7 @@
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
 #include "i2c-lcd.h"
+//#include "DS3231.h"
 //#include "DHT11.h"
 /* USER CODE END Includes */
 
@@ -42,6 +43,8 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
+
 I2C_HandleTypeDef hi2c1;
 
 TIM_HandleTypeDef htim2;
@@ -55,6 +58,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -62,7 +66,7 @@ static void MX_TIM2_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-/********************************DHT11 VARIABLES**********************************/
+/********************************DHT11 VARIABLES AND FUNCTION**********************************/
 uint8_t RHI, RHD, TCI, TCD, SUM;
 float tCelsius = 0;
 float tFahrenheit = 0;
@@ -156,12 +160,80 @@ uint8_t DHT11_Read (void)
   return b;
 }
 
+/********************************LIGHT SENSOR VARIABLES**********************************/
+uint16_t readValue;
+
+void display_Light(uint16_t val) {
+	char str[30];
+	lcd_put_cur(0, 0);
+//	lcd_send_string("Light: ");
+	sprintf(str, "Light: %hu", val);
+	lcd_send_string(str);
+}
+
+/********************************DS3231**********************************/
+#define DS3231_ADDRESS 0xD0
+
+uint8_t dec_To_Bcd(int val);
+int bcd_To_Dec(uint8_t val);
+
+void set_Time(uint8_t sec, uint8_t min, uint8_t hour, uint8_t dow, uint8_t dom,
+			  uint8_t month, uint8_t year);
+void get_Time(void);
+
+typedef struct {
+	uint8_t second;
+	uint8_t minute;
+	uint8_t hour;
+	uint8_t dayOfWeek;
+	uint8_t dayOfMonth;
+	uint8_t month;
+	uint8_t year;
+} TIME;
+
+TIME time;
+
+uint8_t dec_To_Bcd(int val) {
+	return (uint8_t)((val/10*16) + (val%10));
+}
+
+int bcd_To_Dec(uint8_t val) {
+	return (int)((val/16*10) + (val%16));
+}
+
+void set_Time(uint8_t sec, uint8_t min, uint8_t hour, uint8_t dow, uint8_t dom,
+			  uint8_t month, uint8_t year) {
+	uint8_t set_time_buffer[7];
+	set_time_buffer[0] = dec_To_Bcd(sec);
+	set_time_buffer[1] = dec_To_Bcd(min);
+	set_time_buffer[2] = dec_To_Bcd(hour);
+	set_time_buffer[3] = dec_To_Bcd(dow);
+	set_time_buffer[4] = dec_To_Bcd(dom);
+	set_time_buffer[5] = dec_To_Bcd(month);
+	set_time_buffer[6] = dec_To_Bcd(year);
+
+	HAL_I2C_Mem_Write(&hi2c1, DS3231_ADDRESS, 0x00, 1, set_time_buffer, 7, 1000);
+}
+
+void get_Time(void) {
+	uint8_t get_time_buffer[7];
+	HAL_I2C_Mem_Read(&hi2c1, DS3231_ADDRESS, 0x00, 1, get_time_buffer, 7, 1000);
+
+	time.second 	= bcd_To_Dec(get_time_buffer[0]);
+	time.minute 	= bcd_To_Dec(get_time_buffer[1]);
+	time.hour 		= bcd_To_Dec(get_time_buffer[2]);
+	time.dayOfWeek 	= bcd_To_Dec(get_time_buffer[3]);
+	time.dayOfMonth = bcd_To_Dec(get_time_buffer[4]);
+	time.month 		= bcd_To_Dec(get_time_buffer[5]);
+	time.year 		= bcd_To_Dec(get_time_buffer[6]);
+}
 /* USER CODE END 0 */
 
 /**
   * @brief  The application entry point.
   * @retval int
   */
+
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -188,9 +260,12 @@ int main(void)
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_TIM2_Init();
+  MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim2);
   HAL_TIM_Base_Start_IT(&htim2);
+
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -202,27 +277,46 @@ int main(void)
 
   lcd_clear();
   HAL_Delay(1000);
+
+//  set_Time(0, 49, 21, 6, 5, 4, 24);
+  char time_buffer[30];
+
   while (1)
   {
-	  display_Temp(tCelsius);
-	  display_Humid(RH);
+//	  display_Temp(tCelsius);
+//	  display_Humid(RH);
+//
+//	  if(DHT11_Start()) {
+//		  RHI = DHT11_Read(); // Relative humidity integral
+//		  RHD = DHT11_Read(); // Relative humidity decimal
+//		  TCI = DHT11_Read(); // Celsius integral
+//		  TCD = DHT11_Read(); // Celsius decimal
+//		  SUM = DHT11_Read(); // Check sum
+//
+//		  if(SUM == RHI + RHD + TCI + TCD) {
+//			  // Can use RHI and TCI for any purposes if whole number only needed
+//			  tCelsius = (float)TCI + (float)(TCD/10.0);
+//			  tFahrenheit = tCelsius * 9/5 + 32;
+//			  RH = (float)RHI + (float)(RHD/10.0);
+//			  // Can use tCelsius, tFahrenheit and RH for any purposes
+//		  }
+//	  }
 
-	  if(DHT11_Start()) {
-		  RHI = DHT11_Read(); // Relative humidity integral
-		  RHD = DHT11_Read(); // Relative humidity decimal
-		  TCI = DHT11_Read(); // Celsius integral
-		  TCD = DHT11_Read(); // Celsius decimal
-		  SUM = DHT11_Read(); // Check sum
+//	  HAL_ADC_Start(&hadc1);
+//	  HAL_ADC_PollForConversion(&hadc1, 500);
+//	  readValue = HAL_ADC_GetValue(&hadc1);
+//	  display_Light(readValue);
 
-		  if(SUM == RHI + RHD + TCI + TCD) {
-			  // Can use RHI and TCI for any purposes if whole number only needed
-			  tCelsius = (float)TCI + (float)(TCD/10.0);
-			  tFahrenheit = tCelsius * 9/5 + 32;
-			  RH = (float)RHI + (float)(RHD/10.0);
-			  // Can use tCelsius, tFahrenheit and RH for any purposes
-		  }
-	  }
-	  HAL_Delay(2000);
+	  get_Time();
+	  sprintf(time_buffer, "%02d:%02d:%02d", time.hour, time.minute, time.second);
+	  lcd_put_cur(0, 0);
+	  lcd_send_string(time_buffer);
+
+	  sprintf(time_buffer, "%02d-%02d-20%02d", time.dayOfMonth, time.month, time.year);
+	  lcd_put_cur(1, 0);
+	  lcd_send_string(time_buffer);
+
+	  HAL_Delay(500);
 
     /* USER CODE END WHILE */
 
@@ -274,6 +368,58 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief ADC1 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_ADC1_Init(void)
+{
+
+  /* USER CODE BEGIN ADC1_Init 0 */
+
+  /* USER CODE END ADC1_Init 0 */
+
+  ADC_ChannelConfTypeDef sConfig = {0};
+
+  /* USER CODE BEGIN ADC1_Init 1 */
+
+  /* USER CODE END ADC1_Init 1 */
+
+  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
+  */
+  hadc1.Instance = ADC1;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
+  hadc1.Init.Resolution = ADC_RESOLUTION_12B;
+  hadc1.Init.ScanConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
+  hadc1.Init.DiscontinuousConvMode = DISABLE;
+  hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
+  hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
+  hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
+  hadc1.Init.NbrOfConversion = 1;
+  hadc1.Init.DMAContinuousRequests = DISABLE;
+  hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
+  if (HAL_ADC_Init(&hadc1) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time.
+  */
+  sConfig.Channel = ADC_CHANNEL_9;
+  sConfig.Rank = 1;
+  sConfig.SamplingTime = ADC_SAMPLETIME_15CYCLES;
+  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN ADC1_Init 2 */
+
+  /* USER CODE END ADC1_Init 2 */
+
 }
 
 /**
@@ -367,8 +513,8 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOH_CLK_ENABLE();
-  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */

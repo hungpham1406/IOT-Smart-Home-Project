@@ -1,0 +1,167 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Full viewport height */
+  background-color: #f7f7f7; /* Light gray background */
+}
+.register-container .text-right{
+  align-items: right;
+
+}
+.register-form {
+  width: 100%;
+  max-width: 400px; /* Adjust the width of the form */
+  padding: 15px;
+  margin: auto;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15); /* Optional: add shadow for a "card" effect */
+  background: #ffffff; /* White background */
+}
+.regis-heading {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.login-container {
+  height: 100vh; /* Full viewport height */
+  background-color: #f7f7f7; /* Light gray background */
+}
+
+.login-form {
+  width: 100%;
+  max-width: 400px; /* Adjust the width of the form */
+  padding: 15px;
+  margin: auto;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.15); 
+  background: #ffffff; /* White background */
+}
+.weather-block-container {
+  display: flex;        /* Enables Flexbox */
+  justify-content: center; /* Centers horizontally */
+   /* Centers vertically if the container has a defined height */
+  height: 50vh;        /* This gives a full viewport height to your container */
+  padding: 20px;        /* Add some padding around */
+}
+
+.weather-block {
+  /* Style for the weather block content */
+  width: 100%;          /* Use the full width of the container */
+  max-width: 1150px;     /* Maximum width of the block */
+  text-align: center;   /* Center the text inside the block */
+  padding: 20px;        /* Padding inside the block */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for aesthetics */
+  border-radius: 8px;   /* Optional rounded corners */
+  background-color: #fff; /* Background color */
+}
+/* SensorBlock.css */
+.sensor-block-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;          /* Use the full width of the container */
+  max-width: 1150px; 
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for aesthetics */
+  border-radius: 8px;   /* Optional rounded corners */
+  background-color: #fff;
+  height: 20vh; /* Adjust the height as necessary */
+  margin-top: 10px;
+}
+
+.sensor-block {
+  text-align: center;
+  margin-bottom:5px;
+  /* Additional styles */
+}
+
+.sensor-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* This adds space between your buttons */
+}
+
+/* Style your buttons as needed */
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+/* Dashboard.css */
+.dashboard {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    flex-direction: column;
+  }
+}
+
+/* ControlBlock.css */
+.control-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ffe5e5; /* Light pink background as per your image */
+  padding: 20px;
+  margin: 10px;
+  border-radius: 8px; /* Optional: rounded corners for the block */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: shadow for depth */
+}
+
+.device-logo, .device-control, .device-settings {
+  flex: 1; /* Each child will take up an equal amount of space */
+  text-align: center; /* Center align the content */
+}
+
+/* Style for the device logo and settings icon */
+.device-logo img, .device-settings button {
+  /* Insert your style here */
+}
+
+/* Style for the control buttons */
+.device-control button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff; /* Blue background */
+  color: white;
+  cursor: pointer;
+}
+
+.device-control button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Style for the settings gear icon */
+.device-settings button {
+  font-size: 24px; /* Larger size for the gear icon */
+  background: none; /* No background */
+  border: none;
+  cursor: pointer;
+}
+
+.device-settings button:hover {
+  color: #007bff; /* Blue color on hover */
+}

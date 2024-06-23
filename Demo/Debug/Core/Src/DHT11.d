@@ -1,4 +1,4 @@
-Core/Src/DS3231.o: ../Core/Src/DS3231.c ../Core/Inc/DS3231.h \
+Core/Src/DHT11.o: ../Core/Src/DHT11.c ../Core/Inc/DHT11.h \
  ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
@@ -32,7 +32,7 @@ Core/Src/DS3231.o: ../Core/Src/DS3231.c ../Core/Inc/DS3231.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
  ../Core/Inc/i2c-lcd.h
-../Core/Inc/DS3231.h:
+../Core/Inc/DHT11.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:

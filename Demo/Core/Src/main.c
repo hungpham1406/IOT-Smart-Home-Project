@@ -23,8 +23,10 @@
 /* USER CODE BEGIN Includes */
 #include "stdio.h"
 #include "i2c-lcd.h"
-//#include "DS3231.h"
-//#include "DHT11.h"
+#include "button.h"
+#include "DS3231.h"
+#include "DHT11.h"
+#include "automatic_mode.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,6 +50,7 @@ ADC_HandleTypeDef hadc1;
 I2C_HandleTypeDef hi2c1;
 
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN PV */
 
@@ -59,6 +62,7 @@ static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_ADC1_Init(void);
+static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -66,99 +70,102 @@ static void MX_ADC1_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+/************* Variables from @ main.h ****************/
+int state = 0;
+
 /********************************DHT11 VARIABLES AND FUNCTION**********************************/
-uint8_t RHI, RHD, TCI, TCD, SUM;
-float tCelsius = 0;
-float tFahrenheit = 0;
-float RH = 0;
+//uint8_t RHI, RHD, TCI, TCD, SUM;
+//float tCelsius = 0;
+//float tFahrenheit = 0;
+//float RH = 0;
+//
+//void display_Temp(float Temp) {
+//	char str[30];
+//	lcd_put_cur(0, 0);
+//	lcd_send_string("Temp: ");
+//	sprintf(str, "%.1f", Temp);
+//	lcd_send_string(str);
+//}
+//
+//void display_Humid(float RH) {
+//	char str[30];
+//	lcd_put_cur(1, 0);
+//	lcd_send_string("Humidity: ");
+//	sprintf(str, "%.1f", RH);
+//	lcd_send_string(str);
+//}
 
-void display_Temp(float Temp) {
-	char str[30];
-	lcd_put_cur(0, 0);
-	lcd_send_string("Temp: ");
-	sprintf(str, "%.1f", Temp);
-	lcd_send_string(str);
-}
+//#define DHT11_PORT GPIOA
+//#define DHT11_PIN GPIO_PIN_2
+//
+//void microDelay (uint16_t delay);
+//uint8_t DHT11_Start (void);
+//uint8_t DHT11_Read (void);
+//
+//uint32_t pMillis, cMillis;
+//
+//void microDelay (uint16_t delay)
+//{
+//  __HAL_TIM_SET_COUNTER(&htim2, 0);
+//  while (__HAL_TIM_GET_COUNTER(&htim2) < delay);
+//}
 
-void display_Humid(float RH) {
-	char str[30];
-	lcd_put_cur(1, 0);
-	lcd_send_string("Humidity: ");
-	sprintf(str, "%.1f", RH);
-	lcd_send_string(str);
-}
-
-#define DHT11_PORT GPIOA
-#define DHT11_PIN GPIO_PIN_2
-
-void microDelay (uint16_t delay);
-uint8_t DHT11_Start (void);
-uint8_t DHT11_Read (void);
-
-uint32_t pMillis, cMillis;
-
-void microDelay (uint16_t delay)
-{
-  __HAL_TIM_SET_COUNTER(&htim2, 0);
-  while (__HAL_TIM_GET_COUNTER(&htim2) < delay);
-}
-
-uint8_t DHT11_Start (void)
-{
-  uint8_t Response = 0;
-  GPIO_InitTypeDef GPIO_InitStructPrivate = {0};
-  GPIO_InitStructPrivate.Pin = DHT11_PIN;
-  GPIO_InitStructPrivate.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStructPrivate.Speed = GPIO_SPEED_FREQ_LOW;
-  GPIO_InitStructPrivate.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(DHT11_PORT, &GPIO_InitStructPrivate); // set the pin as output
-  HAL_GPIO_WritePin (DHT11_PORT, DHT11_PIN, 0);   // pull the pin low
-  HAL_Delay(20);   // wait for 20ms
-  HAL_GPIO_WritePin (DHT11_PORT, DHT11_PIN, 1);   // pull the pin high
-  microDelay (30);   // wait for 30us
-  GPIO_InitStructPrivate.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStructPrivate.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(DHT11_PORT, &GPIO_InitStructPrivate); // set the pin as input
-  microDelay (40);
-  if (!(HAL_GPIO_ReadPin (DHT11_PORT, DHT11_PIN)))
-  {
-    microDelay (80);
-    if ((HAL_GPIO_ReadPin (DHT11_PORT, DHT11_PIN))) Response = 1;
-  }
-  pMillis = HAL_GetTick();
-  cMillis = HAL_GetTick();
-  while ((HAL_GPIO_ReadPin (DHT11_PORT, DHT11_PIN)) && pMillis + 2 > cMillis)
-  {
-    cMillis = HAL_GetTick();
-  }
-  return Response;
-}
-
-uint8_t DHT11_Read (void)
-{
-  uint8_t a,b;
-  for (a=0;a<8;a++)
-  {
-    pMillis = HAL_GetTick();
-    cMillis = HAL_GetTick();
-    while (!(HAL_GPIO_ReadPin (DHT11_PORT, DHT11_PIN)) && pMillis + 2 > cMillis)
-    {  // wait for the pin to go high
-      cMillis = HAL_GetTick();
-    }
-    microDelay (40);   // wait for 40 us
-    if (!(HAL_GPIO_ReadPin (DHT11_PORT, DHT11_PIN)))   // if the pin is low
-      b&= ~(1<<(7-a));
-    else
-      b|= (1<<(7-a));
-    pMillis = HAL_GetTick();
-    cMillis = HAL_GetTick();
-    while ((HAL_GPIO_ReadPin (DHT11_PORT, DHT11_PIN)) && pMillis + 2 > cMillis)
-    {  // wait for the pin to go low
-      cMillis = HAL_GetTick();
-    }
-  }
-  return b;
-}
+//uint8_t DHT11_Start (void)
+//{
+//  uint8_t Response = 0;
+//  GPIO_InitTypeDef GPIO_InitStructPrivate = {0};
+//  GPIO_InitStructPrivate.Pin = DHT11_PIN;
+//  GPIO_InitStructPrivate.Mode = GPIO_MODE_OUTPUT_PP;
+//  GPIO_InitStructPrivate.Speed = GPIO_SPEED_FREQ_LOW;
+//  GPIO_InitStructPrivate.Pull = GPIO_NOPULL;
+//  HAL_GPIO_Init(DHT11_PORT, &GPIO_InitStructPrivate); // set the pin as output
+//  HAL_GPIO_WritePin (DHT11_PORT, DHT11_PIN, 0);   // pull the pin low
+//  HAL_Delay(20);   // wait for 20ms
+//  HAL_GPIO_WritePin (DHT11_PORT, DHT11_PIN, 1);   // pull the pin high
+//  microDelay (30);   // wait for 30us
+//  GPIO_InitStructPrivate.Mode = GPIO_MODE_INPUT;
+//  GPIO_InitStructPrivate.Pull = GPIO_PULLUP;
+//  HAL_GPIO_Init(DHT11_PORT, &GPIO_InitStructPrivate); // set the pin as input
+//  microDelay (40);
+//  if (!(HAL_GPIO_ReadPin (DHT11_PORT, DHT11_PIN)))
+//  {
+//    microDelay (80);
+//    if ((HAL_GPIO_ReadPin (DHT11_PORT, DHT11_PIN))) Response = 1;
+//  }
+//  pMillis = HAL_GetTick();
+//  cMillis = HAL_GetTick();
+//  while ((HAL_GPIO_ReadPin (DHT11_PORT, DHT11_PIN)) && pMillis + 2 > cMillis)
+//  {
+//    cMillis = HAL_GetTick();
+//  }
+//  return Response;
+//}
+//
+//uint8_t DHT11_Read (void)
+//{
+//  uint8_t a,b;
+//  for (a=0;a<8;a++)
+//  {
+//    pMillis = HAL_GetTick();
+//    cMillis = HAL_GetTick();
+//    while (!(HAL_GPIO_ReadPin (DHT11_PORT, DHT11_PIN)) && pMillis + 2 > cMillis)
+//    {  // wait for the pin to go high
+//      cMillis = HAL_GetTick();
+//    }
+//    microDelay (40);   // wait for 40 us
+//    if (!(HAL_GPIO_ReadPin (DHT11_PORT, DHT11_PIN)))   // if the pin is low
+//      b&= ~(1<<(7-a));
+//    else
+//      b|= (1<<(7-a));
+//    pMillis = HAL_GetTick();
+//    cMillis = HAL_GetTick();
+//    while ((HAL_GPIO_ReadPin (DHT11_PORT, DHT11_PIN)) && pMillis + 2 > cMillis)
+//    {  // wait for the pin to go low
+//      cMillis = HAL_GetTick();
+//    }
+//  }
+//  return b;
+//}
 
 /********************************LIGHT SENSOR VARIABLES**********************************/
 uint16_t readValue;
@@ -172,68 +179,67 @@ void display_Light(uint16_t val) {
 }
 
 /********************************DS3231**********************************/
-#define DS3231_ADDRESS 0xD0
-
-uint8_t dec_To_Bcd(int val);
-int bcd_To_Dec(uint8_t val);
-
-void set_Time(uint8_t sec, uint8_t min, uint8_t hour, uint8_t dow, uint8_t dom,
-			  uint8_t month, uint8_t year);
-void get_Time(void);
-
-typedef struct {
-	uint8_t second;
-	uint8_t minute;
-	uint8_t hour;
-	uint8_t dayOfWeek;
-	uint8_t dayOfMonth;
-	uint8_t month;
-	uint8_t year;
-} TIME;
-
-TIME time;
-
-uint8_t dec_To_Bcd(int val) {
-	return (uint8_t)((val/10*16) + (val%10));
-}
-
-int bcd_To_Dec(uint8_t val) {
-	return (int)((val/16*10) + (val%16));
-}
-
-void set_Time(uint8_t sec, uint8_t min, uint8_t hour, uint8_t dow, uint8_t dom,
-			  uint8_t month, uint8_t year) {
-	uint8_t set_time_buffer[7];
-	set_time_buffer[0] = dec_To_Bcd(sec);
-	set_time_buffer[1] = dec_To_Bcd(min);
-	set_time_buffer[2] = dec_To_Bcd(hour);
-	set_time_buffer[3] = dec_To_Bcd(dow);
-	set_time_buffer[4] = dec_To_Bcd(dom);
-	set_time_buffer[5] = dec_To_Bcd(month);
-	set_time_buffer[6] = dec_To_Bcd(year);
-
-	HAL_I2C_Mem_Write(&hi2c1, DS3231_ADDRESS, 0x00, 1, set_time_buffer, 7, 1000);
-}
-
-void get_Time(void) {
-	uint8_t get_time_buffer[7];
-	HAL_I2C_Mem_Read(&hi2c1, DS3231_ADDRESS, 0x00, 1, get_time_buffer, 7, 1000);
-
-	time.second 	= bcd_To_Dec(get_time_buffer[0]);
-	time.minute 	= bcd_To_Dec(get_time_buffer[1]);
-	time.hour 		= bcd_To_Dec(get_time_buffer[2]);
-	time.dayOfWeek 	= bcd_To_Dec(get_time_buffer[3]);
-	time.dayOfMonth = bcd_To_Dec(get_time_buffer[4]);
-	time.month 		= bcd_To_Dec(get_time_buffer[5]);
-	time.year 		= bcd_To_Dec(get_time_buffer[6]);
-}
+//#define DS3231_ADDRESS 0xD0
+//
+//uint8_t dec_To_Bcd(int val);
+//int bcd_To_Dec(uint8_t val);
+//
+//void set_Time(uint8_t sec, uint8_t min, uint8_t hour, uint8_t dow, uint8_t dom,
+//			  uint8_t month, uint8_t year);
+//void get_Time(void);
+//
+//typedef struct {
+//	uint8_t second;
+//	uint8_t minute;
+//	uint8_t hour;
+//	uint8_t dayOfWeek;
+//	uint8_t dayOfMonth;
+//	uint8_t month;
+//	uint8_t year;
+//} TIME;
+//
+//TIME time;
+//
+//uint8_t dec_To_Bcd(int val) {
+//	return (uint8_t)((val/10*16) + (val%10));
+//}
+//
+//int bcd_To_Dec(uint8_t val) {
+//	return (int)((val/16*10) + (val%16));
+//}
+//
+//void set_Time(uint8_t sec, uint8_t min, uint8_t hour, uint8_t dow, uint8_t dom,
+//			  uint8_t month, uint8_t year) {
+//	uint8_t set_time_buffer[7];
+//	set_time_buffer[0] = dec_To_Bcd(sec);
+//	set_time_buffer[1] = dec_To_Bcd(min);
+//	set_time_buffer[2] = dec_To_Bcd(hour);
+//	set_time_buffer[3] = dec_To_Bcd(dow);
+//	set_time_buffer[4] = dec_To_Bcd(dom);
+//	set_time_buffer[5] = dec_To_Bcd(month);
+//	set_time_buffer[6] = dec_To_Bcd(year);
+//
+//	HAL_I2C_Mem_Write(&hi2c1, DS3231_ADDRESS, 0x00, 1, set_time_buffer, 7, 1000);
+//}
+//
+//void get_Time(void) {
+//	uint8_t get_time_buffer[7];
+//	HAL_I2C_Mem_Read(&hi2c1, DS3231_ADDRESS, 0x00, 1, get_time_buffer, 7, 1000);
+//
+//	time.second 	= bcd_To_Dec(get_time_buffer[0]);
+//	time.minute 	= bcd_To_Dec(get_time_buffer[1]);
+//	time.hour 		= bcd_To_Dec(get_time_buffer[2]);
+//	time.dayOfWeek 	= bcd_To_Dec(get_time_buffer[3]);
+//	time.dayOfMonth = bcd_To_Dec(get_time_buffer[4]);
+//	time.month 		= bcd_To_Dec(get_time_buffer[5]);
+//	time.year 		= bcd_To_Dec(get_time_buffer[6]);
+//}
 /* USER CODE END 0 */
 
 /**
   * @brief  The application entry point.
   * @retval int
   */
-
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -261,26 +267,28 @@ int main(void)
   MX_I2C1_Init();
   MX_TIM2_Init();
   MX_ADC1_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_Base_Start(&htim2);
   HAL_TIM_Base_Start_IT(&htim2);
-
+  HAL_TIM_Base_Start_IT(&htim3);
 
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  lcd_init();
+//  lcd_init();
+//
+//  lcd_send_string("Hello world!");
+//  HAL_Delay(2000);
+//
+//  lcd_clear();
+//  HAL_Delay(1000);
 
-  lcd_send_string("Hello world!");
-  HAL_Delay(2000);
+//  set_Time(0, 36, 21, 6, 22, 6, 24);
+//  char time_buffer[30];
 
-  lcd_clear();
-  HAL_Delay(1000);
-
-//  set_Time(0, 49, 21, 6, 5, 4, 24);
-  char time_buffer[30];
-
+  state = INIT;
   while (1)
   {
 //	  display_Temp(tCelsius);
@@ -306,15 +314,20 @@ int main(void)
 //	  HAL_ADC_PollForConversion(&hadc1, 500);
 //	  readValue = HAL_ADC_GetValue(&hadc1);
 //	  display_Light(readValue);
+//	  HAL_ADC_Stop(&hadc1);
 
-	  get_Time();
-	  sprintf(time_buffer, "%02d:%02d:%02d", time.hour, time.minute, time.second);
-	  lcd_put_cur(0, 0);
-	  lcd_send_string(time_buffer);
+//	  get_Time();
+//	  sprintf(time_buffer, "%02d:%02d:%02d", time_def.hour, time_def.minute, time_def.second);
+//	  lcd_put_cur(0, 0);
+//	  lcd_send_string(time_buffer);
+//
+//	  sprintf(time_buffer, "%02d-%02d-20%02d", time_def.dayOfMonth, time_def.month, time_def.year);
+//	  lcd_put_cur(1, 0);
+//	  lcd_send_string(time_buffer);
 
-	  sprintf(time_buffer, "%02d-%02d-20%02d", time.dayOfMonth, time.month, time.year);
-	  lcd_put_cur(1, 0);
-	  lcd_send_string(time_buffer);
+//	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+
+	  automatic_run();
 
 	  HAL_Delay(500);
 
@@ -502,26 +515,92 @@ static void MX_TIM2_Init(void)
 }
 
 /**
+  * @brief TIM3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM3_Init(void)
+{
+
+  /* USER CODE BEGIN TIM3_Init 0 */
+
+  /* USER CODE END TIM3_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM3_Init 1 */
+
+  /* USER CODE END TIM3_Init 1 */
+  htim3.Instance = TIM3;
+  htim3.Init.Prescaler = 40-1;
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 9999;
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM3_Init 2 */
+
+  /* USER CODE END TIM3_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
   */
 static void MX_GPIO_Init(void)
 {
+  GPIO_InitTypeDef GPIO_InitStruct = {0};
 /* USER CODE BEGIN MX_GPIO_Init_1 */
 /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOD, GPIO_PIN_13, GPIO_PIN_RESET);
+
+  /*Configure GPIO pin : PD13 */
+  GPIO_InitStruct.Pin = GPIO_PIN_13;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOD, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : button1_Pin button2_Pin button3_Pin */
+  GPIO_InitStruct.Pin = button1_Pin|button2_Pin|button3_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
 /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
-
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+	timerRun();
+	getKeyInput();
+}
 /* USER CODE END 4 */
 
 /**

@@ -1,5 +1,6 @@
-Core/Src/DS3231.o: ../Core/Src/DS3231.c ../Core/Inc/DS3231.h \
- ../Core/Inc/main.h ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
+Core/Src/automatic_mode.o: ../Core/Src/automatic_mode.c \
+ ../Core/Inc/automatic_mode.h ../Core/Inc/main.h \
+ ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h \
  ../Core/Inc/stm32f4xx_hal_conf.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_rcc.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h \
@@ -31,8 +32,9 @@ Core/Src/DS3231.o: ../Core/Src/DS3231.c ../Core/Inc/DS3231.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h \
  ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h \
- ../Core/Inc/i2c-lcd.h
-../Core/Inc/DS3231.h:
+ ../Core/Inc/button.h ../Core/Inc/i2c-lcd.h ../Core/Inc/DHT11.h \
+ ../Core/Inc/DS3231.h ../Core/Inc/software_timer.h
+../Core/Inc/automatic_mode.h:
 ../Core/Inc/main.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h:
 ../Core/Inc/stm32f4xx_hal_conf.h:
@@ -66,4 +68,8 @@ Core/Src/DS3231.o: ../Core/Src/DS3231.c ../Core/Inc/DS3231.h \
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_pwr_ex.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h:
 ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h:
+../Core/Inc/button.h:
 ../Core/Inc/i2c-lcd.h:
+../Core/Inc/DHT11.h:
+../Core/Inc/DS3231.h:
+../Core/Inc/software_timer.h:

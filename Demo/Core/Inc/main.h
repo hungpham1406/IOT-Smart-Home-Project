@@ -36,7 +36,7 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
+extern int state;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -57,8 +57,20 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define button1_Pin GPIO_PIN_8
+#define button1_GPIO_Port GPIOA
+#define button2_Pin GPIO_PIN_9
+#define button2_GPIO_Port GPIOA
+#define button3_Pin GPIO_PIN_10
+#define button3_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
+#define INIT			0UL
+#define STATE1			1UL
+#define STATE2			2UL
+#define STATE3			3UL
+#define STATE4			4UL
+#define STATE5			5UL
 
 /* USER CODE END Private defines */
 

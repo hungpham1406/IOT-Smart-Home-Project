@@ -9,6 +9,8 @@
 
 void display_Adjustment(int state, char* name_Adjust_Var, uint8_t adjust_Var) {
 	char str[16];
+
+	lcd_clear();
 	lcd_put_cur(0, 0);
 	sprintf(str, "STATE: %d", state);
 	lcd_send_string(str);

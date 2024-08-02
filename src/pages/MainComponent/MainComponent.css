@@ -1,0 +1,57 @@
+.hero {
+    position: relative;
+    color: blanchedalmond;
+    text-align: center;
+    background-size: cover;
+}
+.container-fluid {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+    margin-right: auto;
+    margin-left: auto;
+}
+.hero-img {
+    width: 100%;
+    height: auto;
+    opacity: 0.5; /* Lighten the image so text stands out */
+}
+
+.hero-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+}
+
+.features .card {
+    text-align: center;
+    padding: 20px;
+}
+
+.feature-img {
+    width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.testimonial-img {
+    width: 100px;
+    height: auto;
+    display: block;
+    margin: 0 auto 10px; /* Center the image */
+}
+
+.testimonials {
+    text-align: center;
+}
+
+.notification {
+    padding: 5px;
+    background-color: #4CAF50;
+    color: black;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 5px;
+    display: inline-block;
+}

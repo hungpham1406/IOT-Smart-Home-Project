@@ -1,0 +1,68 @@
+.weatherBlockContainer {
+    display: flex;        /* Enables Flexbox */
+    justify-content: center; /* Centers horizontally */
+    /* Centers vertically if the container has a defined height */
+    height: 50vh;        /* This gives a full viewport height to your container */
+    padding: 20px;        /* Add some padding around */
+}
+
+.weatherBlock{
+    /* Style for the weather block content */
+    width: 100%;          /* Use the full width of the container */
+    max-width: 1150px;     /* Maximum width of the block */
+    text-align: center;   /* Center the text inside the block */
+    padding: 20px;        /* Padding inside the block */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for aesthetics */
+    border-radius: 8px;   /* Optional rounded corners */
+    background-color: #fff; /* Background color */
+}
+
+.sensorButtons {
+    display: flex;
+    justify-content: center;
+    gap: 40px; /* This adds space between your buttons */
+}
+.humidityIcon {
+    color: #9bbcd4; /* Darker shade of light blue */
+}
+
+.lightIcon {
+    color: #dbc8a0; /* Darker shade of soft cream */
+}
+
+.temperatureIcon {
+    color: #e9a1a7; /* Darker shade of soft pink */
+}
+
+
+
+.sunny {
+    background: url('../../img/Weather/Sunny.png') no-repeat center center;
+    background-size: cover;
+}
+
+.cloudy {
+    background: url('../../img/Weather/Cloudy.png') no-repeat center center;
+    background-size: cover;
+}
+
+.rainy {
+    background: url('../../img/Weather/Rainy.png') no-repeat center center;
+    background-size: cover;
+}
+
+.thunderstorm {
+    background: url('../../img/Weather/Thunderstorm.png') no-repeat center center;
+    background-size: cover;
+}
+
+.snow {
+    background: url('../../img/Weather/snow.png') no-repeat center center;
+    background-size: cover;
+}
+
+.mist {
+    background: url('../../img/Weather/mist.png') no-repeat center center;
+    background-size: cover;
+}
+

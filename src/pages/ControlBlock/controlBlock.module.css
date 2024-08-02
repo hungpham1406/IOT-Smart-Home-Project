@@ -1,0 +1,209 @@
+/* ControlBlock.css */
+.controlBlock {
+    background-color: #fffff; /* Light pink background as per your image */
+    width: 320px;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px; /* Optional: rounded corners for the block */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: shadow for depth */
+}
+.upper {
+    display: flex;
+    flex-direction: row;
+    gap: 60px;
+    justify-content: space-between;
+}
+.deviceLogo{
+    text-align: left;
+    margin-right: 50px;
+}
+.deviceControl{
+    text-align: right;
+}
+ .deviceSettings{
+    margin-top: 50px;
+ }
+.setting{
+    padding-left: 10px;
+    color: black;
+}
+
+.labelButton {
+    width: 50px;
+    height: 25px;
+    display: block;
+    background-color: #000;
+    border-radius: 100px;
+    cursor: pointer;
+    position: relative;
+}
+.inputType{
+    display: none;
+}
+.inputType:checked + .movingCircle{
+    transform: translateX(23px);
+    box-shadow: 0px 0px 10px 5px #fff;
+}
+
+.movingCircle{
+    position: absolute;
+    left: 0px;
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 100px;
+    margin: 2px;
+    transition: 0.2s;
+}
+/* Style for the control buttons */
+.deviceControl button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff; /* Blue background */
+    color: white;
+    cursor: pointer;
+}
+
+.deviceControl button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Style for the settings gear icon */
+.deviceSettings button {
+    font-size: 24px; /* Larger size for the gear icon */
+    background: none; /* No background */
+    border: none;
+    cursor: pointer;
+}
+
+.deviceSettings button:hover {
+    color: #007bff; /* Blue color on hover */
+}
+.expandedContent {
+    padding: 10px;
+    border-top: 1px solid #ccc;
+    background: #fffff;
+}
+/* Light controls specific styles */
+
+.lightControls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.timeLabel {
+    flex-grow: 1;
+    margin-right: 10px; /* Adjust this as needed */
+}
+
+.saveButton {
+    padding: 5px 15px;
+    background-color: black; /* Green background */
+    color: white;
+    /*border: none;*/
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 20px; /* Ensures some space before the button */
+    white-space: nowrap; /* Keeps the button text on one line */
+}
+
+.saveButton:hover {
+    background-color: #cccccc; /* Darker green on hover */
+}
+
+.colorControl {
+    width: 100%; /* Ensures the color control is on its own line */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.colorControl label {
+    flex-grow: 1;
+}
+
+.colorControl input[type="color"] {
+    margin-left: 10px;
+}
+/*Door control css*/
+.doorControls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Adds space between manual and auto mode rows */
+}
+
+.doorControlRow {
+    display: flex;
+    align-items: center; /* Aligns the label and toggle switch vertically */
+    justify-content: space-between; /* Pushes the label and toggle to opposite ends */
+}
+/* Fan controls specific styles */
+.fanControls {
+    margin-top: 10px;
+}
+
+.fanSlider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 15px;
+    border-radius: 5px;
+    background: linear-gradient(to right, #03A9F4, #E91E63); /* Gradient background */
+    outline: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+}
+
+.fanSlider:hover {
+    opacity: 1; /* Full opacity on hover */
+}
+
+.fanSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px; /* Large thumb */
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50; /* Green thumb */
+    cursor: pointer;
+}
+
+.fanSlider::-moz-range-thumb {
+    width: 25px; /* Large thumb */
+    height: 25px;
+    border-radius: 50%;
+    background: #4CAF50; /* Green thumb */
+    cursor: pointer;
+}
+.notification {
+    display: inline-block;
+    padding: 5px;
+    margin-top: 5px;
+    /*background-color: ; !* Green background, subtle *!*/
+    color: #4CAF50;
+    text-align: center;
+    /*border-radius: 5px;*/
+    font-size: 12px; /* Small font size for subtle notification */
+}
+.backgroundLight {
+    background: url('../../img/ControlDeviceImages/light.png') no-repeat center center;
+    background-size: cover;
+    /*opacity: 0.5;*/
+}
+
+.backgroundDoor {
+    background: url('../../img/ControlDeviceImages/Door.png') no-repeat center center;
+    background-size: cover;
+}
+
+.backgroundFan {
+    background: url('../../img/ControlDeviceImages/fan2.png') no-repeat center center;
+    background-size: cover;
+}
+
+

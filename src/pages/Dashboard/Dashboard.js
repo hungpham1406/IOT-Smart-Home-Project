@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import WeatherBlock from '../WeatherBlock/WeatherBlock'; // Component to display the weather
 import ControlBlock from '../ControlBlock/ControlBlock';
+import LCDChangeState from '../LCDChangeState/LCDChangeState';
 import '../../index.css';
 import style from './dashboard.module.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -37,7 +38,9 @@ function Dashboard() {
                         isExpanded={expandedId === item.id} // Pass whether this block is expanded
                     />
                 ))}
+
             </div>
+            <LCDChangeState/>
         </div>
     );
 }

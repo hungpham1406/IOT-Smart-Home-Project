@@ -1,0 +1,29 @@
+/* LCDStateChanger.css */
+
+.lcd-container {
+    margin-top: 50px;
+    /*align-items: center;*/
+    /*margin-right: 40px;*/
+}
+
+.lcd-form {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+}
+
+.lcd-form h1 {
+    color: #e67e22;
+}
+
+.lcd-form .form-label {
+    font-size: 1.2em;
+    color: #e67e22;
+}
+
+.btn-primary {
+    background-color: #3498db;
+    border-color: #3498db;
+}

@@ -7,6 +7,7 @@ import Login from './pages/Login/Login';
 import AboutUs from './pages/AboutUs/AboutUs';
 import MainComponent from './pages/MainComponent/MainComponent';
 import Register from './pages/Register/Register';
+import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import Statistic from './pages/Statistic/Statistic';
 import logo from '../src/logo/Frame 1.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -47,6 +48,7 @@ function App() {
             <Route path="/statistic" element={<Statistic />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/about-us" element={<AboutUs />} />
           </Routes>
         </div>

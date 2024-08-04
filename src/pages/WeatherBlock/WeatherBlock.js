@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import styles from './weatherBlock.module.css';
 import { faCloud, faSun, faCloudRain, faBolt, faSnowflake, faSmog, faThermometerHalf, faTint } from '@fortawesome/free-solid-svg-icons';
 
-const AIO_KEY = ''; // Your Adafruit IO key
+const AIO_KEY = 'aio_Tnyw5684RNcrpwBzGRjUKodEoDX2'; // Your Adafruit IO key
 const AIO_USERNAME = 'hungpham1406'; // Your Adafruit IO username
 
 async function getFeedData(feedKey) {

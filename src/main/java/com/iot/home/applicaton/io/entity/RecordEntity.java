@@ -6,6 +6,8 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -16,7 +18,7 @@ public class RecordEntity implements Serializable {
     @GeneratedValue
     private Long id;
     private Double value;
-    private Timestamp timestamp;
+    private LocalDateTime time;
     private String status;
     @ManyToOne
     @JoinColumn(name="devices_id")

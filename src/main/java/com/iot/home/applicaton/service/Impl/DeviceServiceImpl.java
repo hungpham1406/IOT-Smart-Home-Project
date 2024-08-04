@@ -22,14 +22,14 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public DeviceDto addDevices(String name) {
+    public DeviceDto addDevices(String name,String feedKey) {
         DeviceEntity checkExist= deviceRepository.findByName(name);
         if(checkExist!=null) throw new RuntimeException("Devices already exits");
         String deviceId= Utils.generateDeviceId(30);
         DeviceEntity deviceEntity= new DeviceEntity();
-        deviceEntity.setDeviceId(deviceId);
         deviceEntity.setRecordEntities(null);
         deviceEntity.setName(name);
+        deviceEntity.setFeedKey(feedKey);
         deviceRepository.save(deviceEntity);
         ModelMapper mapper= new ModelMapper();
         DeviceDto returnValue=mapper.map(deviceEntity,DeviceDto.class);

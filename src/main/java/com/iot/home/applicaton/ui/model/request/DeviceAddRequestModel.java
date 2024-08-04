@@ -7,4 +7,5 @@ import lombok.Setter;
 @Setter
 public class DeviceAddRequestModel {
     private String name;
+    private String feedKey;
 }

@@ -40,7 +40,7 @@ public class DeviceController {
         returnValue.setOperationName(RequestOperationName.ADD_DEVICE.name());
         returnValue.setOperationResult(RequestOperationStatus.ERROR.name());
 
-         DeviceDto deviceDetail= deviceService.addDevices(deviceAddRequestModel.getName());
+         DeviceDto deviceDetail= deviceService.addDevices(deviceAddRequestModel.getName(),deviceAddRequestModel.getFeedKey());
          if(deviceDetail!=null){
              returnValue.setOperationResult(RequestOperationStatus.SUCCESS.name());
          }

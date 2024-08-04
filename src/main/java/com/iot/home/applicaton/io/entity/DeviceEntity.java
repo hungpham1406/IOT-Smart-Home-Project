@@ -15,10 +15,9 @@ public class DeviceEntity implements Serializable {
     @Id
     @GeneratedValue
     private Long id;
-    @Column(nullable = false,length = 30)
-    private String deviceId;
     @Column(nullable = false,length = 20)
     private String name;
+    private String feedKey;
     @OneToMany(mappedBy = "deviceEntity", cascade = CascadeType.ALL)
     List<RecordEntity> recordEntities;
 }

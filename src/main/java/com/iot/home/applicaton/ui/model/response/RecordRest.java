@@ -4,10 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
 public class RecordRest {
-    private Timestamp timestamp;
-    private Long id;
+    private Double value;
+    private LocalDateTime time;
+    private String status;
 }

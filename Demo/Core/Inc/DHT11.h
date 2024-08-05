@@ -26,6 +26,7 @@ void display_Temp(void);
 void display_Humid(void);
 void microDelay (uint16_t delay);
 void activate_DHT11(void);
+void publish_Data(void);
 uint8_t DHT11_Start (void);
 uint8_t DHT11_Read (void);
 

@@ -6,8 +6,9 @@
  */
 
 #include "button.h"
+extern I2C_HandleTypeDef hi2c2;
 
-#define NUMBER_BUTTONS		3
+char i2cRxBuffer[5];
 
 int KeyReg0[NUMBER_BUTTONS];
 int KeyReg1[NUMBER_BUTTONS];
@@ -69,4 +70,19 @@ void getKeyInput() {
 			}
 		}
 	}
+}
+
+void getKeyFromAdafruit()
+{
+	HAL_I2C_Slave_Receive(&hi2c2, (uint8_t *)i2cRxBuffer, sizeof(i2cRxBuffer), 100);
+	if(strlen(i2cRxBuffer) > 0)
+	{
+		if(i2cRxBuffer[0] == 'b' && i2cRxBuffer[1] == 't' && i2cRxBuffer[2] == 'n')
+		{
+			if(i2cRxBuffer[3] == '1') subKeyProcess(0);
+			if(i2cRxBuffer[3] == '2') subKeyProcess(1);
+			if(i2cRxBuffer[3] == '3') subKeyProcess(2);
+		}
+	}
+	memset(i2cRxBuffer, 0, sizeof(i2cRxBuffer));
 }

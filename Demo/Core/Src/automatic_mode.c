@@ -11,6 +11,7 @@ void display_Adjustment(int state, char* name_Adjust_Var, uint8_t adjust_Var) {
 	char str[16];
 
 	lcd_clear();
+	HAL_Delay(10);
 	lcd_put_cur(0, 0);
 	sprintf(str, "STATE: %d", state);
 	lcd_send_string(str);
@@ -36,30 +37,33 @@ void automatic_run() {
 		lcd_clear();
 		state = STATE1;
 		setTimer1(100);
-		setTimer2(100);
+		setTimer2(1000);
+
+//		setTimer3(1000);
 		break;
 
 	case STATE1:
 		if(timer1_flag == 1) {
 			setTimer1(500);
+			lcd_clear();
+			HAL_Delay(10);
 
+			activate_DHT11();
 			display_Humid();
 			display_Temp();
 			display_Time();
-			activate_DHT11();
 		}
 
 		if(timer2_flag == 1) {
-			setTimer2(100);
-//			HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
+			setTimer2(1000);
+			publish_Data();
 		}
+
 
 		if(isButtonPressed(0)) {
 			state = STATE2;
 			setTimer2(100);
-			lcd_clear();
 			temp = time_def.hour;
-			lcd_clear();
 		}
 		break;
 
@@ -81,12 +85,12 @@ void automatic_run() {
 			set_Hour(temp);
 			set_Second(0);
 			state = STATE1;
+			setTimer1(100);
+			setTimer2(1000);
 		}
 
 		if(isButtonPressed(0)) {
-			lcd_clear();
-			state = STATE1;
-			setTimer1(100);
+			state = STATE3;
 			setTimer2(100);
 			temp = time_def.minute;
 		}
@@ -94,6 +98,8 @@ void automatic_run() {
 		break;
 
 	case STATE3:									//Adjust minute
+		display_Adjustment(STATE3, "Minute", temp);
+
 		if(timer2_flag == 1) {
 			setTimer2(100);
 			HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
@@ -102,17 +108,19 @@ void automatic_run() {
 		if(isButtonPressed(1)) {
 			temp += 1;
 			if(temp > 60) temp = 0;
+			display_Adjustment(STATE3, "Minute", temp);
 		}
 
 		if(isButtonPressed(2)) {
 			set_Minute(temp);
 			set_Second(0);
 			state = STATE1;
+			setTimer1(100);
+			setTimer2(1000);
 		}
 
 		if(isButtonPressed(0)) {
 			state = STATE4;
-			setTimer1(100);
 			setTimer2(100);
 			temp = time_def.dayOfMonth;
 		}
@@ -120,6 +128,8 @@ void automatic_run() {
 		break;
 
 	case STATE4:									//Adjust day of month
+		display_Adjustment(STATE4, "Day of month", temp);
+
 		if(timer2_flag == 1) {
 			setTimer2(100);
 			HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
@@ -127,36 +137,44 @@ void automatic_run() {
 
 		if(isButtonPressed(1)) {
 			temp += 1;
-			uint8_t month = time_def.month;
-			uint8_t year = time_def.year;
-			if(month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
-				if(temp > 31) temp = 1;
-			}
-			else if(month == 4 || month == 6 || month == 9|| month == 11) {
-				if(temp > 30) temp = 1;
-			}
-			else if(month == 2) {
-				if(year % 4 == 0) {
-					if(temp > 29) temp = 1;
-				}
-				else
-					if(temp > 28) temp = 1;
-			}
+//			uint8_t month = time_def.month;
+//			uint8_t year = time_def.year;
+//			if(month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12) {
+//				if(temp > 31) temp = 1;
+//			}
+//			else if(month == 4 || month == 6 || month == 9|| month == 11) {
+//				if(temp > 30) temp = 1;
+//			}
+//			else if(month == 2) {
+//				if(year % 4 == 0) {
+//					if(temp >= 29) temp = 1;
+//				}
+//				else
+//					if(temp >= 28) temp = 1;
+//			}
+			if(temp > 31) temp = 1;
+
+			display_Adjustment(STATE4, "Day of month", temp);
 		}
 
 		if(isButtonPressed(2)) {
 			set_DayOfMonth(temp);
 			state = STATE1;
+			setTimer1(100);
+			setTimer2(1000);
 		}
 
 		if(isButtonPressed(0)) {
 			state = STATE5;
-			setTimer1(100);
 			setTimer2(100);
 			temp = time_def.month;
 		}
 
+		break;
+
 	case STATE5:									//Adjust  month
+		display_Adjustment(STATE5, "Month", temp);
+
 		if(timer2_flag == 1) {
 			setTimer2(100);
 			HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
@@ -164,18 +182,21 @@ void automatic_run() {
 
 		if(isButtonPressed(1)) {
 			temp += 1;
-			if(temp >= 12) temp = 1;
+			if(temp > 12) temp = 1;
+			display_Adjustment(STATE5, "Month", temp);
 		}
 
 		if(isButtonPressed(2)) {
 			set_Month(temp);
 			state = STATE1;
+			setTimer1(100);
+			setTimer2(1000);
 		}
 
 		if(isButtonPressed(0)) {
 			state = STATE1;
 			setTimer1(100);
-			setTimer2(100);
+			setTimer2(1000);
 		}
 
 		break;

@@ -8,6 +8,7 @@
 #include "DHT11.h"
 
 extern TIM_HandleTypeDef htim2;
+extern I2C_HandleTypeDef hi2c2;
 
 uint8_t RHI, RHD, TCI, TCD, SUM;
 uint32_t pMillis = 0, cMillis = 0;
@@ -15,14 +16,19 @@ float tCelsius = 0;
 float tFahrenheit = 0;
 float RH = 0;
 
-void display_Temp(void) {
+char data_Buffer[20];
+
+void display_Temp(void)
+{
 	char str[10];
+	HAL_Delay(10);
 	lcd_put_cur(0, 0);
 	sprintf(str, "T:%.1f*C", tCelsius);
 	lcd_send_string(str);
 }
 
-void display_Humid(void) {
+void display_Humid(void)
+{
 	char str[10];
 	lcd_put_cur(0, 9);
 	sprintf(str, "H:%.1f", RH);
@@ -92,7 +98,8 @@ uint8_t DHT11_Read (void)
   return b;
 }
 
-void activate_DHT11(void) {
+void activate_DHT11(void)
+{
 	if(DHT11_Start()) {
 	  RHI = DHT11_Read(); // Relative humidity integral
 	  RHD = DHT11_Read(); // Relative humidity decimal
@@ -108,4 +115,17 @@ void activate_DHT11(void) {
 		  // Can use tCelsius, tFahrenheit and RH for any purposes
 	  }
 	}
+}
+
+
+void publish_Data(void)
+{
+	sprintf(data_Buffer, "!Temp#%.1f!", tCelsius);
+	HAL_I2C_Master_Transmit(&hi2c2, (ARDUINO_ADDRESS << 1), (uint8_t *)data_Buffer, 12, 100);
+	memset(data_Buffer, 0, sizeof(data_Buffer));
+	HAL_Delay(100);
+
+	sprintf(data_Buffer, "!Humi#%.1f!", RH);
+	HAL_I2C_Master_Transmit(&hi2c2, (ARDUINO_ADDRESS << 1), (uint8_t *)data_Buffer, 12, 100);
+	memset(data_Buffer, 0, sizeof(data_Buffer));
 }

@@ -72,6 +72,7 @@ void Error_Handler(void);
 #define STATE4			4UL
 #define STATE5			5UL
 
+#define ARDUINO_ADDRESS		0x04
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

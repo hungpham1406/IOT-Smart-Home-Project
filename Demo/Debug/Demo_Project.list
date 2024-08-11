@@ -31,23 +31,23 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
  13 .comment      00000043  00000000  00000000  00020218  2**0
                   CONTENTS, READONLY
- 14 .debug_info   0000fe10  00000000  00000000  0002025b  2**0
+ 14 .debug_info   0000fe0e  00000000  00000000  0002025b  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_abbrev 0000292c  00000000  00000000  0003006b  2**0
+ 15 .debug_abbrev 0000296c  00000000  00000000  00030069  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_aranges 00000fa8  00000000  00000000  00032998  2**3
+ 16 .debug_aranges 00000fa8  00000000  00000000  000329d8  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_rnglists 00000c1c  00000000  00000000  00033940  2**0
+ 17 .debug_rnglists 00000c1c  00000000  00000000  00033980  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .debug_macro  0002405f  00000000  00000000  0003455c  2**0
+ 18 .debug_macro  0002405f  00000000  00000000  0003459c  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 19 .debug_line   00013c26  00000000  00000000  000585bb  2**0
+ 19 .debug_line   00013c22  00000000  00000000  000585fb  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_str    000d9b20  00000000  00000000  0006c1e1  2**0
+ 20 .debug_str    000d9b20  00000000  00000000  0006c21d  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_frame  000052a4  00000000  00000000  00145d04  2**2
+ 21 .debug_frame  000052a4  00000000  00000000  00145d40  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 22 .debug_line_str 0000005a  00000000  00000000  0014afa8  2**0
+ 22 .debug_line_str 0000005a  00000000  00000000  0014afe4  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -2754,10 +2754,10 @@ void automatic_run() {
  80019f4:	b2da      	uxtb	r2, r3
  80019f6:	4b21      	ldr	r3, [pc, #132]	; (8001a7c <automatic_run+0x3a8>)
  80019f8:	701a      	strb	r2, [r3, #0]
-			if(temp >= 12) temp = 1;
+			if(temp > 12) temp = 1;
  80019fa:	4b20      	ldr	r3, [pc, #128]	; (8001a7c <automatic_run+0x3a8>)
  80019fc:	781b      	ldrb	r3, [r3, #0]
- 80019fe:	2b0b      	cmp	r3, #11
+ 80019fe:	2b0c      	cmp	r3, #12
  8001a00:	d902      	bls.n	8001a08 <automatic_run+0x334>
  8001a02:	4b1e      	ldr	r3, [pc, #120]	; (8001a7c <automatic_run+0x3a8>)
  8001a04:	2201      	movs	r2, #1
@@ -3497,20 +3497,17 @@ int main(void)
   HAL_TIM_Base_Start_IT(&htim3);
  8001ed8:	4808      	ldr	r0, [pc, #32]	; (8001efc <main+0x54>)
  8001eda:	f003 fb3f 	bl	800555c <HAL_TIM_Base_Start_IT>
-//  HAL_Delay(1000);
+  /* USER CODE END 2 */
 
-//  set_Time(0, 36, 21, 6, 22, 6, 24);
-//  char time_buffer[30];
-
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+//  set_Time(00, 40, 21, 7, 11, 8, 24);
   state = INIT;
  8001ede:	4b08      	ldr	r3, [pc, #32]	; (8001f00 <main+0x58>)
  8001ee0:	2200      	movs	r2, #0
  8001ee2:	601a      	str	r2, [r3, #0]
-//	  lcd_put_cur(1, 0);
-//	  lcd_send_string(time_buffer);
-
-//	  HAL_GPIO_TogglePin(GPIOD, GPIO_PIN_13);
-
+  while (1)
+  {
 	  automatic_run();
  8001ee4:	f7ff fbf6 	bl	80016d4 <automatic_run>
 	  getKeyFromAdafruit();

@@ -129,7 +129,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-
+//  set_Time(00, 40, 21, 7, 11, 8, 24);
   state = INIT;
   while (1)
   {

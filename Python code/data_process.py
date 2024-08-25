@@ -7,7 +7,7 @@ from Adafruit_IO import MQTTClient
 
 AIO_FEEDS = ["button1val", "button2val", "button3val", "rgbstm32"]
 AIO_USERNAME = "hungpham1406"
-AIO_KEY = "put your aio key here"
+AIO_KEY = "insert AIO key"
 
 def connected ( client ):
     print ("Connect Successfully ...")
@@ -33,7 +33,15 @@ def message ( client , feed_id , payload ):
         # print(f"Button {payload} \n")
 
     if feed_id == "rgbstm32":
-        print(payload)
+        # Remove the hash at the start if it's there
+        hex_value = payload.lstrip('#')
+    
+        # Split the hex into its components
+        r = int(hex_value[0:2], 16)
+        g = int(hex_value[2:4], 16)
+        b = int(hex_value[4:6], 16)
+        print(f"rgb-{r}-{g}-{b}")
+        ser.write(f"rgb{r}-{g}-{b}\n".encode())
 
 
 client = MQTTClient ( AIO_USERNAME , AIO_KEY )

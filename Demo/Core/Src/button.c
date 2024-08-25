@@ -8,7 +8,7 @@
 #include "button.h"
 extern I2C_HandleTypeDef hi2c2;
 
-char i2cRxBuffer[5];
+char i2cRxBuffer[25];
 
 int KeyReg0[NUMBER_BUTTONS];
 int KeyReg1[NUMBER_BUTTONS];
@@ -43,6 +43,8 @@ int isButtonPressed(int key_index) {
 void subKeyProcess(int key_index) {
 	button_flag[key_index] = 1;
 }
+
+extern void rgb_color(uint8_t red, uint8_t green, uint8_t blue);
 
 void getKeyInput() {
 	for(int i = 0; i<NUMBER_BUTTONS; i++) {
@@ -82,6 +84,19 @@ void getKeyFromAdafruit()
 			if(i2cRxBuffer[3] == '1') subKeyProcess(0);
 			if(i2cRxBuffer[3] == '2') subKeyProcess(1);
 			if(i2cRxBuffer[3] == '3') subKeyProcess(2);
+		}
+
+		else if(i2cRxBuffer[0] == 'r' && i2cRxBuffer[1] == 'g' && i2cRxBuffer[2] == 'b')
+		{
+			int temp_red, temp_green, temp_blue = 0;
+			sscanf(i2cRxBuffer, "rgb-%d-%d-%d", &temp_red, &temp_green, &temp_blue);
+			red = (uint8_t)temp_red;
+			green = (uint8_t)temp_green;
+			blue = (uint8_t)temp_blue;
+			rgb_color(red, green, blue);
+			red = 0;
+			green = 0;
+			blue = 0;
 		}
 	}
 	memset(i2cRxBuffer, 0, sizeof(i2cRxBuffer));

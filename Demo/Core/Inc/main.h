@@ -37,6 +37,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 extern int state;
+extern uint8_t red, green, blue;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -48,6 +49,8 @@ extern int state;
 /* USER CODE BEGIN EM */
 
 /* USER CODE END EM */
+
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);

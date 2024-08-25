@@ -13,6 +13,7 @@
 #include "main.h"
 #include "string.h"
 #include "stdio.h"
+#include "i2c-lcd.h"
 
 #define NORMAL_STATE GPIO_PIN_SET
 #define PRESSED_STATE GPIO_PIN_RESET

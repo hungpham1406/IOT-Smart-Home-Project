@@ -14,7 +14,7 @@
 #include "stdio.h"
 
 #define DHT11_PORT GPIOA
-#define DHT11_PIN GPIO_PIN_2
+#define DHT11_PIN GPIO_PIN_5
 
 
 extern uint8_t RHI, RHD, TCI, TCD, SUM;
